@@ -17,10 +17,12 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 @SuppressWarnings("deprecation")
@@ -104,8 +106,14 @@ public class RestartDetectorBlock extends BlockWithEntity implements PolymerBloc
     @Override
     public @Nullable ElementHolder createElementHolder(ServerWorld world, BlockPos pos, BlockState initialBlockState) {
         var spinnyElement = new BlockDisplayElement();
-        spinnyElement.setBlockState(Blocks.COMMAND_BLOCK.getDefaultState());
-        spinnyElement.setScale(new Vector3f(0.5f, 0.5f, 0.5f));
+        spinnyElement.setBlockState(Blocks.COMMAND_BLOCK.getDefaultState().with(CommandBlock.FACING, Direction.UP));
+
+        var matrix = new Matrix4f();
+        matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(world.getTime() * 6f));
+        matrix.scale(0.5f);
+        matrix.translate(-0.5f, 0.0f, -0.5f);
+        spinnyElement.setTransformation(matrix);
+
         spinnyElement.setInterpolationDuration(3);
 
         return new ElementHolder() {
@@ -116,7 +124,11 @@ public class RestartDetectorBlock extends BlockWithEntity implements PolymerBloc
             @Override
             protected void onTick() {
                 if (world.getTime() % 3 == 0) {
-                    spinnyElement.setRightRotation(RotationAxis.POSITIVE_Y.rotationDegrees(world.getTime() * 6f));
+                    var matrix = new Matrix4f();
+                    matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(world.getTime() * 6.0f));
+                    matrix.scale(0.5f);
+                    matrix.translate(-0.5f, (float) (Math.sin(world.getTime() / 10.0) * 0.2), -0.5f);
+                    spinnyElement.setTransformation(matrix);
                     spinnyElement.startInterpolation();
                 }
             }
