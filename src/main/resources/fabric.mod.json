@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "restart_detector",
+	"version": "${version}",
+	"name": "Restart Detector",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"enjarai"
+	],
+	"contact": {
+		"homepage": "https://enjarai.dev/",
+		"sources": "https://github.com/enjarai/restart-detector",
+		"issues": "https://github.com/enjarai/restart-detector/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/restart_detector/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "dev.enjarai.restartdetector.RestartDetector"
+		]
+	},
+	"mixins": [
+		"restart_detector.mixins.json"
+	],
+	"depends": {
+		"minecraft": "~1.20.2",
+		"fabric-api": "*",
+		"polymer-core": "*"
+	}
+}
