@@ -24,7 +24,7 @@ public class ModConfig {
 
 
     public boolean hijackStopCommand = true;
-    public int stopCountdownTicks = 1200;
+    public int stopCountdownTicks = 600;
 
 
     public static void load() {

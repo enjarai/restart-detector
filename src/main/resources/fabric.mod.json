@@ -3,7 +3,7 @@
 	"id": "restart_detector",
 	"version": "${version}",
 	"name": "Restart Detector",
-	"description": "Stop sensitive farms and other things from breaking on server restarts.",
+	"description": "Stop sensitive farms and flying machines from breaking on server restarts.",
 	"authors": [
 		"enjarai"
 	],
@@ -29,5 +29,16 @@
 		"polymer-core": "*",
 		"polymer-virtual-entity": "*",
 		"server_translations_api": "*"
+	},
+
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.discord": "https://discord.gg/WcYsDDQtyR"
+			}
+		},
+		"projects": {
+			"modrinth": "ZCH3dl0z"
+		}
 	}
 }
