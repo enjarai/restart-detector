@@ -24,8 +24,8 @@ public class StopCommandMixin {
     )
     private static void hijackStopCommand(CommandContext<ServerCommandSource> context, CallbackInfoReturnable<Integer> cir) {
         if (ModConfig.INSTANCE.hijackStopCommand) {
-            context.getSource().sendFeedback(() -> Text.literal("Server stopping in %d seconds (%d ticks)"
-                    .formatted(ModConfig.INSTANCE.stopCountdownTicks / 20, ModConfig.INSTANCE.stopCountdownTicks)), true);
+            context.getSource().sendFeedback(() -> Text.translatable("commands.stop.stopping",
+                    ModConfig.INSTANCE.stopCountdownTicks / 20, ModConfig.INSTANCE.stopCountdownTicks), true);
             RestartDetector.startStopCountdown();
 
             cir.setReturnValue(1);
@@ -41,19 +41,28 @@ public class StopCommandMixin {
     )
     private static <T extends ArgumentBuilder<ServerCommandSource, T>> T addSubCommand(T builder) {
         if (ModConfig.INSTANCE.hijackStopCommand) {
-            return builder.then(literal("cancel")
-                    .executes(ctx -> {
-                        if (RestartDetector.isServerStopping()) {
-                            ctx.getSource().sendFeedback(() -> Text.literal("Cancelled server stopping"), true);
-                            RestartDetector.cancelStopCountdown();
+            return builder
+                    .then(literal("cancel")
+                        .executes(ctx -> {
+                            if (RestartDetector.isServerStopping()) {
+                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.stop.cancelled"), true);
+                                RestartDetector.cancelStopCountdown();
 
+                                return 1;
+                            } else {
+                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.stop.not_stopping"), true);
+
+                                return 0;
+                            }
+                        })
+                    )
+                    .then(literal("now")
+                        .executes(ctx -> {
+                            ctx.getSource().sendFeedback(() -> Text.translatable("commands.stop.stopping"), true);
+                            ctx.getSource().getServer().stop(false);
                             return 1;
-                        } else {
-                            ctx.getSource().sendFeedback(() -> Text.literal("Server is not stopping right now"), true);
-
-                            return 0;
-                        }
-                    }));
+                        })
+                    );
         }
 
         return builder;

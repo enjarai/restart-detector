@@ -3,7 +3,7 @@
 	"id": "restart_detector",
 	"version": "${version}",
 	"name": "Restart Detector",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Stop sensitive farms and other things from breaking on server restarts.",
 	"authors": [
 		"enjarai"
 	],
@@ -26,6 +26,8 @@
 	"depends": {
 		"minecraft": "~1.20.2",
 		"fabric-api": "*",
-		"polymer-core": "*"
+		"polymer-core": "*",
+		"polymer-virtual-entity": "*",
+		"server_translations_api": "*"
 	}
 }

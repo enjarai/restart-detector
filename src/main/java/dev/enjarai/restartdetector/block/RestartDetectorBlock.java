@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -26,7 +27,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 @SuppressWarnings("deprecation")
-public class RestartDetectorBlock extends BlockWithEntity implements PolymerBlock, BlockWithElementHolder {
+public class RestartDetectorBlock extends Block implements PolymerBlock, BlockWithElementHolder {
     public static final IntProperty POWER = Properties.POWER;
     protected static final VoxelShape SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 6.0, 16.0);
 
@@ -53,7 +54,7 @@ public class RestartDetectorBlock extends BlockWithEntity implements PolymerBloc
             int power = (totalTicks - RestartDetector.getTicksToStop()) * 14 / totalTicks + 1;
             world.setBlockState(pos, state.with(POWER, power));
         } else {
-            world.setBlockState(pos, state.with(POWER, 0));
+            world.setBlockState(pos, state.with(POWER, Math.max(0, state.get(POWER) - 1)));
         }
     }
 
@@ -67,12 +68,6 @@ public class RestartDetectorBlock extends BlockWithEntity implements PolymerBloc
         return Blocks.DAYLIGHT_DETECTOR.getDefaultState().with(POWER, state.get(POWER));
     }
 
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new RestartDetectorBlockEntity(pos, state);
-    }
-
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
@@ -81,17 +76,16 @@ public class RestartDetectorBlock extends BlockWithEntity implements PolymerBloc
         return true;
     }
 
-    @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return !world.isClient()
-                ? validateTicker(type, ModBlocks.RESTART_DETECTOR_ENTITY, (world1, pos, state1, be) -> tick(world1, pos, state1))
-                : null;
+    @Override
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        world.scheduleBlockTick(pos, this, 20);
+
+        updateState(state, world, pos);
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state) {
-        if (world.getTime() % 20L == 0L) {
-            updateState(state, world, pos);
-        }
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+        world.scheduleBlockTick(pos, this, 1);
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {

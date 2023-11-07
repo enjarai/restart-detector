@@ -17,6 +17,8 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 
+	maven { url 'https://maven.enjarai.dev/releases' }
+
 	maven { url 'https://maven.nucleoid.xyz' }
 }
 
@@ -36,6 +38,7 @@ dependencies {
 	modImplementation include("eu.pb4:polymer-core:${project.polymer_version}")
 	modImplementation include("eu.pb4:polymer-virtual-entity:${project.polymer_version}")
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api_version}")
 }
 
 processResources {
