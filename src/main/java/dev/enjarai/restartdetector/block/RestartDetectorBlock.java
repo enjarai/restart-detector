@@ -2,29 +2,23 @@ package dev.enjarai.restartdetector.block;
 
 import dev.enjarai.restartdetector.ModConfig;
 import dev.enjarai.restartdetector.RestartDetector;
+import dev.enjarai.restartdetector.display.SpinnyHolder;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
-import eu.pb4.polymer.virtualentity.api.elements.BlockDisplayElement;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.RotationAxis;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 @SuppressWarnings("deprecation")
 public class RestartDetectorBlock extends Block implements PolymerBlock, BlockWithElementHolder {
@@ -99,32 +93,15 @@ public class RestartDetectorBlock extends Block implements PolymerBlock, BlockWi
 
     @Override
     public @Nullable ElementHolder createElementHolder(ServerWorld world, BlockPos pos, BlockState initialBlockState) {
-        var spinnyElement = new BlockDisplayElement();
-        spinnyElement.setBlockState(Blocks.COMMAND_BLOCK.getDefaultState().with(CommandBlock.FACING, Direction.UP));
-
-        var matrix = new Matrix4f();
-        matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(world.getTime() * 6f));
-        matrix.scale(0.5f);
-        matrix.translate(-0.5f, 0.0f, -0.5f);
-        spinnyElement.setTransformation(matrix);
-
-        spinnyElement.setInterpolationDuration(3);
-
-        return new ElementHolder() {
-            {
-                addElement(spinnyElement);
-            }
-
+        return new SpinnyHolder(world, Items.COMMAND_BLOCK.getDefaultStack()) {
             @Override
-            protected void onTick() {
-                if (world.getTime() % 3 == 0) {
-                    var matrix = new Matrix4f();
-                    matrix.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(world.getTime() * 6.0f));
-                    matrix.scale(0.5f);
-                    matrix.translate(-0.5f, (float) (Math.sin(world.getTime() / 10.0) * 0.2), -0.5f);
-                    spinnyElement.setTransformation(matrix);
-                    spinnyElement.startInterpolation();
+            public float getSpeed() {
+                float speed = 6;
+                if (RestartDetector.isServerStopping()) {
+                    var shutdownProgress = this.world.getBlockState(pos).get(POWER) / 15f;
+                    speed += 60 * shutdownProgress;
                 }
+                return speed;
             }
         };
     }

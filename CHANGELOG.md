@@ -1,1 +1,3 @@
-Initial release
+- Slight changes to spinny command block animation, it'll now spin faster the closer it is to a restart.
+  - It should also be a little smoother.
+-
