@@ -1,8 +1,10 @@
 package dev.enjarai.restartdetector;
 
 import dev.enjarai.restartdetector.block.ModBlocks;
+import dev.enjarai.restartdetector.command.RestartDetectorCommand;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
@@ -20,6 +22,10 @@ public class RestartDetector implements ModInitializer {
 		ModBlocks.register();
 
 		ServerTickEvents.END_SERVER_TICK.register(RestartDetector::tick);
+
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			RestartDetectorCommand.register(dispatcher);
+		});
 	}
 
 	public static void tick(MinecraftServer server) {

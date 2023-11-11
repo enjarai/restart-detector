@@ -19,7 +19,11 @@ repositories {
 
 	maven { url 'https://maven.enjarai.dev/releases' }
 
+	// Polymer and other server-side utils
 	maven { url 'https://maven.nucleoid.xyz' }
+
+	// Permissions API
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
@@ -39,6 +43,7 @@ dependencies {
 	modImplementation include("eu.pb4:polymer-virtual-entity:${project.polymer_version}")
 	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
 	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api_version}")
+	include(modImplementation("me.lucko:fabric-permissions-api:${project.permissions_api_version}"))
 }
 
 processResources {

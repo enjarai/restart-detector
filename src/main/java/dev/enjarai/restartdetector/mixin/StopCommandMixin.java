@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import dev.enjarai.restartdetector.ModConfig;
 import dev.enjarai.restartdetector.RestartDetector;
+import dev.enjarai.restartdetector.command.RestartDetectorCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.dedicated.command.StopCommand;
 import net.minecraft.text.Text;
@@ -15,7 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
-@Mixin(StopCommand.class)
+// High priority to put our inject-at-head-cancel later than other potential injectors, which might help compatibility somewhat
+@Mixin(value = StopCommand.class, priority = 1500)
 public class StopCommandMixin {
     @Inject(
             method = "method_13676",
@@ -24,11 +26,7 @@ public class StopCommandMixin {
     )
     private static void hijackStopCommand(CommandContext<ServerCommandSource> context, CallbackInfoReturnable<Integer> cir) {
         if (ModConfig.INSTANCE.hijackStopCommand) {
-            context.getSource().sendFeedback(() -> Text.translatable("commands.stop.stopping",
-                    ModConfig.INSTANCE.stopCountdownTicks / 20, ModConfig.INSTANCE.stopCountdownTicks), true);
-            RestartDetector.startStopCountdown();
-
-            cir.setReturnValue(1);
+            cir.setReturnValue(RestartDetectorCommand.startCountdown(context));
         }
     }
 
@@ -43,18 +41,7 @@ public class StopCommandMixin {
         if (ModConfig.INSTANCE.hijackStopCommand) {
             return builder
                     .then(literal("cancel")
-                        .executes(ctx -> {
-                            if (RestartDetector.isServerStopping()) {
-                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.stop.cancelled"), true);
-                                RestartDetector.cancelStopCountdown();
-
-                                return 1;
-                            } else {
-                                ctx.getSource().sendFeedback(() -> Text.translatable("commands.stop.not_stopping"), true);
-
-                                return 0;
-                            }
-                        })
+                        .executes(RestartDetectorCommand::cancelCountdown)
                     )
                     .then(literal("now")
                         .executes(ctx -> {

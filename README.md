@@ -1,7 +1,14 @@
 # Restart Detector
 
 This **fully server-side** mod adds Restart Detectors, 
-a new block that will output a redstone signal before the server shuts down.
+a new block that will output a redstone signal before server shutdowns.
+
+These new blocks can be used to disable sensitive redstone contraptions to prevent expensive breakages, 
+and can even be used on flying machines due to their lightweight design™! (no blockentity required)
+
+By default, this mod hijacks the behaviour of the `/stop` command to use a countdown before actually 
+shutting down the server, giving restart detectors time to activate. 
+It also adds a few subcommands to manage this behaviour.
 
 ## Visuals
 
