@@ -2,3 +2,4 @@
 - Slight changes to spinny command block animation, it'll now spin faster the closer it is to a restart.
   - It should also be a little smoother.
 - Added a new command, `/restartdetector`, with a few subcommands to use the mod even without hijacking the vanilla stop command.
+- Backported to 1.20.1 and 1.19.4.

@@ -16,7 +16,7 @@ on:
         required: true
 
 jobs:
-  build:
+  publish:
     strategy:
       matrix:
         # Use these Java versions
@@ -39,50 +39,14 @@ jobs:
       - name: make gradle wrapper executable
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
-      - name: build
-        run: ./gradlew build
-      - name: Publish to Maven
-        run: ./gradlew publish
+      - name: build and publish
+        run: ./gradlew chiseledPublishMods
         env:
-          ORG_GRADLE_PROJECT_enjaraiMavenUsername: ${{ secrets.PUBLISH_MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_enjaraiMavenPassword: ${{ secrets.PUBLISH_MAVEN_PASSWORD }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: capture build artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
           path: build/libs/
-
-  # The part that publishes the compiled mod
-  publish:
-    needs: build
-    runs-on: ubuntu-20.04
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: download build artifacts
-        id: download
-        uses: actions/download-artifact@v2
-        with:
-          name: Artifacts
-      - name: Update GitHub Release
-        uses: tubone24/update_release@v1.3.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          body_path: CHANGELOG.md
-          is_append_body: true
-      - name: publish mod
-        uses: Kir-Antipov/mc-publish@v3.2
-        with:
-          changelog-file: CHANGELOG.md
-          modrinth-featured: false
-
-          files: '${{ steps.download.outputs.download-path }}/!(*-@(dev|sources)).jar'
-
-          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-#          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-          game-versions: |
-            1.20.2

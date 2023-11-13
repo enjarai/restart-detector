@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.MapColor;
+/*?<1.20 {?*/import net.minecraft.block.Material;/*?}?*/
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.item.BlockItem;
@@ -19,12 +20,12 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 
 public class ModBlocks {
-    public static final AbstractBlock.Settings DETECTOR_SETTINGS = FabricBlockSettings.create()
+    public static final AbstractBlock.Settings DETECTOR_SETTINGS = /*?>=1.20 {?*//*FabricBlockSettings.create()/*?} else {?*/FabricBlockSettings.of(Material.WOOD)/*?}?*/
             .mapColor(MapColor.OAK_TAN)
-            .instrument(Instrument.BASS)
+            /*?>=1.20 {?*//*.instrument(Instrument.BASS)/*?}?*/
             .strength(0.2F)
             .sounds(BlockSoundGroup.WOOD)
-            .burnable();
+            /*?>=1.20 {?*//*.burnable()/*?}?*/;
 
     public static final RestartDetectorBlock RESTART_DETECTOR =
             Registry.register(Registries.BLOCK, RestartDetector.id("restart_detector"),

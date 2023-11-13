@@ -1,13 +1,15 @@
 plugins {
 	id 'fabric-loom' version '1.4-SNAPSHOT'
 	id 'maven-publish'
+	id "me.modmuss50.mod-publish-plugin" version "0.4.4"
 }
 
-version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
-group = project.maven_group
+archivesBaseName = property('mod.name')
+version = "${property('mod.version')}+${stonecutter.current().version()}"
+group = property('mod.maven_group')
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = archivesBaseName
 }
 
 repositories {
@@ -18,6 +20,7 @@ repositories {
 	// for more information about repositories.
 
 	maven { url 'https://maven.enjarai.dev/releases' }
+	maven { url 'https://maven.enjarai.nl/mirrors' }
 
 	// Polymer and other server-side utils
 	maven { url 'https://maven.nucleoid.xyz' }
@@ -28,29 +31,29 @@ repositories {
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:${stonecutter.current().version()}"
+	mappings "net.fabricmc:yarn:${property('deps.yarn')}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${property('deps.fabric_loader')}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric_api')}"
 	
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
-	modImplementation include("eu.pb4:polymer-core:${project.polymer_version}")
-	modImplementation include("eu.pb4:polymer-virtual-entity:${project.polymer_version}")
-	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
-	modImplementation include("xyz.nucleoid:server-translations-api:${project.server_translations_api_version}")
-	include(modImplementation("me.lucko:fabric-permissions-api:${project.permissions_api_version}"))
+	modImplementation include("eu.pb4:polymer-core:${property('deps.polymer')}")
+	modImplementation include("eu.pb4:polymer-virtual-entity:${property('deps.polymer')}")
+	include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${property('deps.mixin_extras')}")))
+	modImplementation include("xyz.nucleoid:server-translations-api:${property('deps.server_translations_api')}")
+	include(modImplementation("me.lucko:fabric-permissions-api:${property('deps.permissions_api')}"))
 }
 
-processResources {
-	inputs.property "version", project.version
+def target = ">=${project.property('mod.min_target')}- <=${project.property('mod.max_target')}"
 
+processResources {
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand 'mod_version': version, 'target_minecraft': target
 	}
 }
 
@@ -88,5 +91,70 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+// Create a task to collect the completed jars in the root project's build/libs folder.
+def collectJars = tasks.register("collectJars", Copy) {copy ->
+
+	def task = tasks.getByName("remapJar")
+
+	dependsOn(task)
+
+	copy.from task
+	copy.into rootProject.buildDir.path + "/libs"
+}
+
+// Set up assemble to depend on the collectJars task, so it gets run on build.
+assemble {
+	dependsOn(collectJars)
+}
+
+if (stonecutter.current().isActiveVersion()) {
+	loom.runConfigs.server.ideConfigGenerated = true
+
+	rootProject.tasks.register('buildActive') {
+		setGroup 'project'
+
+		dependsOn tasks.getByName('build')
+	}
+}
+
+publishMods {
+	file = remapJar.archiveFile
+	displayName = "${project.property('mod.version')} for ${stonecutter.current().version()}"
+	version = project.version
+	changelog = getRootProject().file("CHANGELOG.md").text
+	type = STABLE
+	modLoaders.add("fabric")
+
+	dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null || providers.environmentVariable("GITHUB_TOKEN").getOrNull() == null
+
+	modrinth {
+		projectId = "ZCH3dl0z"
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+
+		def min = project.property('mod.min_target')
+		def max = project.property('mod.max_target')
+
+		if (min == max) {
+			minecraftVersions.add(min)
+		} else {
+			minecraftVersionRange {
+				start = min
+				end = max
+			}
+		}
+
+		requires {
+			slug = "fabric-api"
+		}
+	}
+
+	github {
+		repository = project.property('mod.repository')
+		accessToken = providers.environmentVariable("GITHUB_TOKEN")
+		commitish = "master"
+		tagName = project.property('mod.version')
 	}
 }
