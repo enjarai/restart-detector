@@ -27,7 +27,7 @@ public class RestartDetectorCommand {
     }
 
     public static int startCountdown(CommandContext<ServerCommandSource> context) {
-        context.getSource().sendFeedback(/*?>=1.20 {?*//*() -> /*?}?*/Text.translatable("commands.stop.stopping",
+        context.getSource().sendFeedback(/*?>=1.20 {?*/() -> /*?}?*/Text.translatable("commands.stop.stopping",
                 ModConfig.INSTANCE.stopCountdownTicks / 20, ModConfig.INSTANCE.stopCountdownTicks), true);
         RestartDetector.startStopCountdown();
 
@@ -36,12 +36,12 @@ public class RestartDetectorCommand {
 
     public static int cancelCountdown(CommandContext<ServerCommandSource> context) {
         if (RestartDetector.isServerStopping()) {
-            context.getSource().sendFeedback(/*?>=1.20 {?*//*() -> /*?}?*/Text.translatable("commands.stop.cancelled"), true);
+            context.getSource().sendFeedback(/*?>=1.20 {?*/() -> /*?}?*/Text.translatable("commands.stop.cancelled"), true);
             RestartDetector.cancelStopCountdown();
 
             return 1;
         } else {
-            context.getSource().sendFeedback(/*?>=1.20 {?*//*() -> /*?}?*/Text.translatable("commands.stop.not_stopping"), true);
+            context.getSource().sendFeedback(/*?>=1.20 {?*/() -> /*?}?*/Text.translatable("commands.stop.not_stopping"), true);
 
             return 0;
         }
