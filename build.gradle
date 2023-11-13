@@ -151,10 +151,10 @@ publishMods {
 		}
 	}
 
-	github {
-		repository = project.property('mod.repository')
-		accessToken = providers.environmentVariable("GITHUB_TOKEN")
-		commitish = "master"
-		tagName = project.property('mod.version')
-	}
+//	github {
+//		repository = project.property('mod.repository')
+//		accessToken = providers.environmentVariable("GITHUB_TOKEN")
+//		commitish = "master"
+//		tagName = project.property('mod.version')
+//	}
 }
