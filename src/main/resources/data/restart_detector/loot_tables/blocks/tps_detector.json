@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "restart_detector:tps_detector"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "restart_detector:blocks/tps_detector"
+}

@@ -1,6 +1,7 @@
 {
   "values": [
-    "restart_detector:restart_detector"
+    "restart_detector:restart_detector",
+    "restart_detector:tps_detector"
   ],
   "replace": false
 }
