@@ -157,6 +157,6 @@ publishMods {
 		repository = project.property('mod.repository')
 		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
 		commitish = "master"
-		tagName = project.property('mod.version')
+		tagName = project.version
 	}
 }
