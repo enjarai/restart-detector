@@ -2,7 +2,9 @@ package dev.enjarai.restartdetector.block;
 
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -36,10 +38,12 @@ public abstract class SpinnyBlock extends Block implements PolymerBlock, BlockWi
         return state.get(POWER);
     }
 
+    /*?<1.20.5 {?*//*
     @Override
     public Block getPolymerBlock(BlockState state) {
         return Blocks.DAYLIGHT_DETECTOR;
     }
+    /*?}?*/
 
     @Override
     public BlockState getPolymerBlockState(BlockState state) {

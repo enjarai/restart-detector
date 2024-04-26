@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 	id "me.modmuss50.mod-publish-plugin" version "0.4.4"
 }
@@ -44,7 +44,6 @@ dependencies {
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 	modImplementation include("eu.pb4:polymer-core:${property('deps.polymer')}")
 	modImplementation include("eu.pb4:polymer-virtual-entity:${property('deps.polymer')}")
-	include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${property('deps.mixin_extras')}")))
 	modImplementation include("xyz.nucleoid:server-translations-api:${property('deps.server_translations_api')}")
 	include(modImplementation("me.lucko:fabric-permissions-api:${property('deps.permissions_api')}"))
 }
@@ -128,11 +127,11 @@ publishMods {
 	type = STABLE
 	modLoaders.add("fabric")
 
-	dryRun = providers.environmentVariable("MODRINTH_TOKEN").getOrNull() == null || providers.environmentVariable("GITHUB_TOKEN").getOrNull() == null
+	dryRun = !providers.gradleProperty('enjaraiModrinthToken').present || !providers.gradleProperty('enjaraiGithubToken').present
 
 	modrinth {
 		projectId = "ZCH3dl0z"
-		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+		accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
 
 		def min = project.property('mod.min_target')
 		def max = project.property('mod.max_target')
@@ -149,12 +148,15 @@ publishMods {
 		requires {
 			slug = "fabric-api"
 		}
+		embeds {
+			slug = "polymer"
+		}
 	}
 
-//	github {
-//		repository = project.property('mod.repository')
-//		accessToken = providers.environmentVariable("GITHUB_TOKEN")
-//		commitish = "master"
-//		tagName = project.property('mod.version')
-//	}
+	github {
+		repository = project.property('mod.repository')
+		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
+		commitish = "master"
+		tagName = project.property('mod.version')
+	}
 }

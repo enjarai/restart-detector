@@ -30,14 +30,20 @@ public class TpsDetectorBlock extends SpinnyBlock {
                 .with(COMPARATOR_POWER, 0));
     }
 
+    /*?<1.20.5 {?*//*
     @Override
     public Block getPolymerBlock(BlockState state) {
         return null;
     }
+    /*?}?*/
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        /*?>=1.20.4 {?*/
+        float mspt = world.getServer().getAverageTickTime();
+        /*?} else {?*//*
         float mspt = world.getServer().getTickTime();
+        /*?}?*/
         float tps = 1000 / Math.max(mspt, maxMspt);
 
         int comparatorPower = Math.min((int) (mspt / maxMspt * 15), 15);
