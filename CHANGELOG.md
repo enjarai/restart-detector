@@ -1,1 +1,1 @@
-- Added support for 1.20.4 and 1.20.5.
+- Added support for 1.21.
