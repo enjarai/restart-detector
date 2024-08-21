@@ -10,7 +10,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.MapColor;
 /*?<1.20 {?*//*import net.minecraft.block.Material;/*?}?*/
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.enums.Instrument;
+/*?<1.21 {?*//*import net.minecraft.block.enums.Instrument;/*?}?*/
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -22,7 +22,7 @@ import net.minecraft.sound.BlockSoundGroup;
 public class ModBlocks {
     public static final AbstractBlock.Settings DETECTOR_SETTINGS = /*?>=1.20 {?*/FabricBlockSettings.create()/*?} else {?*//*FabricBlockSettings.of(Material.WOOD)/*?}?*/
             .mapColor(MapColor.OAK_TAN)
-            /*?>=1.20 {?*/.instrument(Instrument.BASS)/*?}?*/
+            /*?>=1.20 <1.21 {?*//*.instrument(Instrument.BASS)/*?}?*/
             .strength(0.2F)
             .sounds(BlockSoundGroup.WOOD)
             /*?>=1.20 {?*/.burnable()/*?}?*/;
