@@ -1,4 +1,4 @@
-plugins.apply 'io.shcm.shsupercm.fabric.stonecutter'
+plugins.apply 'dev.kikugie.stonecutter'
 stonecutter.active '1.21'
 //-------- !DO NOT EDIT ABOVE THIS LINE! --------\\
 

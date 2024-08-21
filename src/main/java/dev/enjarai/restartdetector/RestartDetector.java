@@ -56,10 +56,10 @@ public class RestartDetector implements ModInitializer {
 	}
 
 	public static Identifier id(String path) {
-		/*? >=1.21 { ?*/
+		/*?>=1.21 {*/
 		return Identifier.of(MOD_ID, path);
-		/*? } else { ?*//*
+		/*?} else {*//*
 		return new Identifier(MOD_ID, path);
-		/*? } ?*/
+		*//*?}*/
 	}
 }

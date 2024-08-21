@@ -38,12 +38,12 @@ public abstract class SpinnyBlock extends Block implements PolymerBlock, BlockWi
         return state.get(POWER);
     }
 
-    /*?<1.20.5 {?*//*
+    /*?<1.20.5 {*//*
     @Override
     public Block getPolymerBlock(BlockState state) {
         return Blocks.DAYLIGHT_DETECTOR;
     }
-    /*?}?*/
+    *//*?}*/
 
     @Override
     public BlockState getPolymerBlockState(BlockState state) {
