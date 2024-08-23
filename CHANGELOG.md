@@ -1,1 +1,1 @@
-- Added support for 1.21.
+- Fixed missing loot tables and recipes in 1.21. (Thanks @meza)

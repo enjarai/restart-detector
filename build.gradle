@@ -141,34 +141,38 @@ publishMods {
 
 	dryRun = !providers.gradleProperty('enjaraiModrinthToken').present || !providers.gradleProperty('enjaraiGithubToken').present
 
-	modrinth {
-		projectId = "ZCH3dl0z"
-		accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
+	if (providers.gradleProperty('enjaraiModrinthToken').present) {
+		modrinth {
+			projectId = "ZCH3dl0z"
+			accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
 
-		def min = project.property('mod.min_target')
-		def max = project.property('mod.max_target')
+			def min = project.property('mod.min_target')
+			def max = project.property('mod.max_target')
 
-		if (min == max) {
-			minecraftVersions.add(min)
-		} else {
-			minecraftVersionRange {
-				start = min
-				end = max
+			if (min == max) {
+				minecraftVersions.add(min)
+			} else {
+				minecraftVersionRange {
+					start = min
+					end = max
+				}
 			}
-		}
 
-		requires {
-			slug = "fabric-api"
-		}
-		embeds {
-			slug = "polymer"
+			requires {
+				slug = "fabric-api"
+			}
+			embeds {
+				slug = "polymer"
+			}
 		}
 	}
 
-	github {
-		repository = project.property('mod.repository')
-		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
-		commitish = "master"
-		tagName = project.version
+	if (providers.gradleProperty('enjaraiGithubToken').present) {
+		github {
+			repository = project.property('mod.repository')
+			accessToken = providers.gradleProperty('enjaraiGithubToken').get()
+			commitish = "master"
+			tagName = project.version
+		}
 	}
 }
