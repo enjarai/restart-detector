@@ -21,7 +21,7 @@
     "WWW"
   ],
   "result": {
-    "item": "restart_detector:tps_detector"
+    "${resultKey}": "restart_detector:tps_detector"
   },
   "show_notification": true
 }
