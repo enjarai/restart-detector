@@ -69,10 +69,6 @@ processResources {
             if (fileCopyDetails.path.startsWith('data/restart_detector/recipes')) {
                 fileCopyDetails.path = fileCopyDetails.path.replace('data/restart_detector/recipes', 'data/restart_detector/recipe')
             }
-
-//            if (fileCopyDetails.path.startsWith('data/restart_detector/loot_table/blocks')) {
-//                fileCopyDetails.path = fileCopyDetails.path.replace('data/restart_detector/loot_table/blocks', 'data/restart_detector/loot_table/block')
-//            }
         }
         includeEmptyDirs = false
     }
