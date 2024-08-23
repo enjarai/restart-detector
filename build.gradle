@@ -12,6 +12,8 @@ base {
 	archivesName = archivesBaseName
 }
 
+def mcVersion = stonecutter.current.version
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
@@ -37,8 +39,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric_api')}"
-	
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
+
+	// Uncomment the following line to enable the deprecated Fabric API modules.
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
 	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
@@ -51,9 +53,31 @@ dependencies {
 def target = ">=${project.property('mod.min_target')}- <=${project.property('mod.max_target')}"
 
 processResources {
-	filesMatching("fabric.mod.json") {
-		expand 'mod_version': version, 'target_minecraft': target
-	}
+    filesMatching("fabric.mod.json") {
+        expand 'mod_version': version, 'target_minecraft': target
+    }
+
+    def resultKey = "item"
+
+    if (stonecutter.compare(mcVersion, "1.21") >= 0) {
+        resultKey = "id"
+        eachFile { fileCopyDetails ->
+            if (fileCopyDetails.path.startsWith('data/restart_detector/loot_tables')) {
+                fileCopyDetails.path = fileCopyDetails.path.replace('data/restart_detector/loot_tables', 'data/restart_detector/loot_table')
+            }
+
+            if (fileCopyDetails.path.startsWith('data/restart_detector/recipes')) {
+                fileCopyDetails.path = fileCopyDetails.path.replace('data/restart_detector/recipes', 'data/restart_detector/recipe')
+            }
+
+//            if (fileCopyDetails.path.startsWith('data/restart_detector/loot_table/blocks')) {
+//                fileCopyDetails.path = fileCopyDetails.path.replace('data/restart_detector/loot_table/blocks', 'data/restart_detector/loot_table/block')
+//            }
+        }
+        includeEmptyDirs = false
+    }
+
+    filesMatching("**/*detector.json") { expand "resultKey": resultKey }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -123,7 +147,7 @@ publishMods {
 
 	modrinth {
 		projectId = "ZCH3dl0z"
-		accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
+//		accessToken = providers.gradleProperty('enjaraiModrinthToken').get()
 
 		def min = project.property('mod.min_target')
 		def max = project.property('mod.max_target')
@@ -147,7 +171,7 @@ publishMods {
 
 	github {
 		repository = project.property('mod.repository')
-		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
+//		accessToken = providers.gradleProperty('enjaraiGithubToken').get()
 		commitish = "master"
 		tagName = project.version
 	}
