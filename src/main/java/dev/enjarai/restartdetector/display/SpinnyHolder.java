@@ -20,7 +20,7 @@ public abstract class SpinnyHolder extends ElementHolder {
 
         spinnyElement.setItem(stack);
         spinnyElement.setScale(new Vector3f(0.5f));
-        updateSpinny();
+//        updateSpinny();
         spinnyElement.setTranslation(new Vector3f(0.0f, 0.25f, 0.0f));
         spinnyElement.setInterpolationDuration(getUpdateRate());
 
