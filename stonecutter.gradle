@@ -1,5 +1,5 @@
 plugins.apply 'dev.kikugie.stonecutter'
-stonecutter.active '1.21'
+stonecutter.active "1.21.4" /* [SC] DO NOT EDIT */
 //-------- !DO NOT EDIT ABOVE THIS LINE! --------\\
 
 stonecutter.registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {

@@ -7,6 +7,8 @@ import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -24,13 +26,17 @@ public class TpsDetectorBlock extends SpinnyBlock {
     public static final IntProperty COMPARATOR_POWER = IntProperty.of("comparator_power", 0, 15);
 
     public TpsDetectorBlock(Settings settings) {
+        /*? if >=1.21.2 {*/
+        super(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, RestartDetector.id("tps_detector"))));
+        /*?} else {*//*
         super(settings);
+        *//*?}*/
         this.setDefaultState(stateManager.getDefaultState()
                 .with(POWER, 0)
                 .with(COMPARATOR_POWER, 0));
     }
 
-    /*?<1.20.5 {*//*
+    /*? <1.20.5 {*//*
     @Override
     public Block getPolymerBlock(BlockState state) {
         return null;
@@ -39,7 +45,7 @@ public class TpsDetectorBlock extends SpinnyBlock {
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        /*?>=1.20.4 {*/
+        /*? >=1.20.4 {*/
         float mspt = world.getServer().getAverageTickTime();
         /*?} else {*//*
         float mspt = world.getServer().getTickTime();

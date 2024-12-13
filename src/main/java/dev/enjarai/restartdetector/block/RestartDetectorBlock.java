@@ -4,8 +4,11 @@ import dev.enjarai.restartdetector.ModConfig;
 import dev.enjarai.restartdetector.RestartDetector;
 import dev.enjarai.restartdetector.display.SpinnyHolder;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -13,7 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class RestartDetectorBlock extends SpinnyBlock {
     public RestartDetectorBlock(Settings settings) {
+        /*? if >=1.21.2 {*/
+        super(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, RestartDetector.id("restart_detector"))));
+        /*?} else {*//*
         super(settings);
+        *//*?}*/
     }
 
     @Override

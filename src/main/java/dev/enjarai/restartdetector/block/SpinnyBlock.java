@@ -2,7 +2,6 @@ package dev.enjarai.restartdetector.block;
 
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -15,6 +14,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import xyz.nucleoid.packettweaker.PacketContext;
 
 @SuppressWarnings("deprecation")
 public abstract class SpinnyBlock extends Block implements PolymerBlock, BlockWithElementHolder {
@@ -38,17 +38,24 @@ public abstract class SpinnyBlock extends Block implements PolymerBlock, BlockWi
         return state.get(POWER);
     }
 
-    /*?<1.20.5 {*//*
+    /*? <1.20.5 {*//*
     @Override
     public Block getPolymerBlock(BlockState state) {
         return Blocks.DAYLIGHT_DETECTOR;
     }
     *//*?}*/
 
+    /*? <1.21.2 {*//*
     @Override
     public BlockState getPolymerBlockState(BlockState state) {
         return Blocks.DAYLIGHT_DETECTOR.getDefaultState().with(POWER, state.get(POWER));
     }
+    *//*?} else {*/
+    @Override
+    public BlockState getPolymerBlockState(BlockState state, PacketContext packetContext) {
+        return Blocks.DAYLIGHT_DETECTOR.getDefaultState().with(POWER, state.get(POWER));
+    }
+    /*?}*/
 
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;

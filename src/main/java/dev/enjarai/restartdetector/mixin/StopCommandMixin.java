@@ -45,7 +45,7 @@ public class StopCommandMixin {
                     )
                     .then(literal("now")
                         .executes(ctx -> {
-                            ctx.getSource().sendFeedback(/*?>=1.20 {*/() -> /*?}*/Text.translatable("commands.stop.stopping"), true);
+                            ctx.getSource().sendFeedback(/*? >=1.20 {*/() -> /*?}*/Text.translatable("commands.stop.stopping"), true);
                             ctx.getSource().getServer().stop(false);
                             return 1;
                         })

@@ -2,6 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
+    /*? if >=1.21.2 {*/
+    "G": "minecraft:glass",
+    "Q": "minecraft:quartz",
+    "W": "#minecraft:wooden_slabs",
+    "E": "minecraft:ender_pearl"
+    /*?} else {*//*
     "G": {
       "item": "minecraft:glass"
     },
@@ -14,14 +20,21 @@
     "E": {
       "item": "minecraft:ender_pearl"
     }
+    *//*?}*/
   },
   "pattern": [
     "GGG",
     "QEQ",
     "WWW"
   ],
+  /*? if >=1.21 {*/
   "result": {
-    "${resultKey}": "restart_detector:restart_detector"
+    "id": "restart_detector:restart_detector"
   },
+  /*?} else {*//*
+  "result": {
+    "item": "restart_detector:restart_detector"
+  },
+  *//*?}*/
   "show_notification": true
 }
