@@ -1,1 +1,1 @@
-- Fixed missing loot tables and recipes in 1.21. (Thanks @meza)
+- Updated to 1.21.2-1.21.4.

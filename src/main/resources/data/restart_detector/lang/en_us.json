@@ -1,6 +1,8 @@
 {
   "block.restart_detector.restart_detector": "Restart Detector",
   "block.restart_detector.tps_detector": "TPS Detector",
+  "item.restart_detector.restart_detector": "Restart Detector",
+  "item.restart_detector.tps_detector": "TPS Detector",
 
   "commands.stop.stopping": "Server stopping in %d seconds (%d ticks)",
   "commands.stop.cancelled": "Cancelled server stopping",

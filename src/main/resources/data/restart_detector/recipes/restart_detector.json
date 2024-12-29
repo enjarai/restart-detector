@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass",
+    "Q": "minecraft:quartz",
+    "W": "#minecraft:wooden_slabs",
+    "E": "minecraft:ender_pearl"
+  },
+  "pattern": [
+    "GGG",
+    "QEQ",
+    "WWW"
+  ],
+  "result": {
+    "id": "restart_detector:restart_detector"
+  },
+  "show_notification": true
+}
