@@ -1,8 +1,8 @@
 plugins {
-	id 'fabric-loom' version '1.8-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 	id "me.modmuss50.mod-publish-plugin" version "0.4.4"
-	id "dev.kikugie.j52j" version "1.0"
+	id "dev.kikugie.j52j" version "2.0"
 }
 
 archivesBaseName = property('mod.name')
@@ -131,6 +131,7 @@ assemble {
 }
 
 loom.runConfigs.server.ideConfigGenerated = true
+loom.runConfigs.client.ideConfigGenerated = true
 
 publishMods {
 	file = remapJar.archiveFile
