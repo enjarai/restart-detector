@@ -13,6 +13,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -65,10 +66,17 @@ public class TpsDetectorBlock extends SpinnyBlock {
         return true;
     }
 
+    /*? >=1.21.9 {*/
+    @Override
+    protected int getComparatorOutput(BlockState state, World world, BlockPos pos, Direction direction) {
+        return state.get(COMPARATOR_POWER);
+    }
+    /*?} else {*//*
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         return state.get(COMPARATOR_POWER);
     }
+    *//*?}*/
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
